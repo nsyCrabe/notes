@@ -55,6 +55,8 @@ const deleteBtn = document.getElementById("deleteBtn");
 const sidebar = document.getElementById("sidebar");
 const menuToggle = document.getElementById("menuToggle");
 const fabNewNote = document.getElementById("fabNewNote");
+const homeGrid = document.getElementById("homeGrid");
+const homeEmptyMsg = document.getElementById("homeEmptyMsg");
 
 function formatDate(ts) {
   const d = new Date(ts);
@@ -79,19 +81,42 @@ async function renderList(filter = "") {
     li.className = "empty-list";
     li.textContent = filter ? "Aucun résultat" : "Aucune note pour l'instant";
     notesList.appendChild(li);
-    return;
+  } else {
+    for (const note of filtered) {
+      const li = document.createElement("li");
+      li.className = "note-item" + (note.id === currentId ? " active" : "");
+      li.innerHTML = `
+        <div class="note-title">${escapeHtml(note.title || "Sans titre")}</div>
+        <div class="note-preview">${escapeHtml((note.body || "").slice(0, 60))}</div>
+        <span class="note-date">${formatDate(note.updatedAt)}</span>
+      `;
+      li.addEventListener("click", () => openNote(note.id));
+      notesList.appendChild(li);
+    }
   }
 
-  for (const note of filtered) {
-    const li = document.createElement("li");
-    li.className = "note-item" + (note.id === currentId ? " active" : "");
-    li.innerHTML = `
-      <div class="note-title">${escapeHtml(note.title || "Sans titre")}</div>
-      <div class="note-preview">${escapeHtml((note.body || "").slice(0, 60))}</div>
-      <span class="note-date">${formatDate(note.updatedAt)}</span>
+  if (!currentId) {
+    renderHomeGrid(notes);
+  }
+}
+
+function renderHomeGrid(notes) {
+  homeGrid.innerHTML = "";
+  if (notes.length === 0) {
+    homeEmptyMsg.classList.remove("hidden");
+    return;
+  }
+  homeEmptyMsg.classList.add("hidden");
+  for (const note of notes) {
+    const card = document.createElement("div");
+    card.className = "home-card";
+    card.innerHTML = `
+      <div class="home-card-title">${escapeHtml(note.title || "Sans titre")}</div>
+      <div class="home-card-preview">${escapeHtml((note.body || "").slice(0, 120))}</div>
+      <div class="home-card-date">${formatDate(note.updatedAt)}</div>
     `;
-    li.addEventListener("click", () => openNote(note.id));
-    notesList.appendChild(li);
+    card.addEventListener("click", () => openNote(note.id));
+    homeGrid.appendChild(card);
   }
 }
 
@@ -114,6 +139,13 @@ async function openNote(id) {
   renderList(searchInput.value);
   closeSidebarOnMobile();
   noteTitle.focus();
+}
+
+function goHome() {
+  currentId = null;
+  editorView.classList.add("hidden");
+  emptyState.classList.remove("hidden");
+  renderList(searchInput.value);
 }
 
 async function createNote() {
@@ -145,10 +177,7 @@ async function deleteCurrentNote() {
   if (!currentId) return;
   if (!confirm("Supprimer cette note ?")) return;
   await deleteNoteDB(currentId);
-  currentId = null;
-  editorView.classList.add("hidden");
-  emptyState.classList.remove("hidden");
-  renderList(searchInput.value);
+  goHome();
 }
 
 function closeSidebarOnMobile() {

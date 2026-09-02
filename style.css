@@ -154,10 +154,12 @@ body {
 #emptyState {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
   color: var(--text-muted);
   font-size: 16px;
+  overflow-y: auto;
 }
 
 .hidden { display: none !important; }
@@ -272,4 +274,79 @@ body {
 
 @media (max-width: 760px) {
   #fabNewNote { display: flex; align-items: center; justify-content: center; }
+}
+
+.home-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+#homeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  align-content: start;
+}
+
+@media (min-width: 900px) {
+  #homeGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.home-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.home-card:active { transform: scale(0.97); }
+
+.home-card-title {
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.home-card-preview {
+  font-size: 13px;
+  color: var(--text-muted);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  flex: 1;
+}
+
+.home-card-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+#homeEmptyMsg {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-top: 40px;
 }
