@@ -248,3 +248,28 @@ body {
   #editor { padding: 70px 20px 24px; }
   .sidebar-header { padding-top: 60px; }
 }
+
+#fabNewNote {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  z-index: 25;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 28px;
+  line-height: 1;
+  box-shadow: 0 4px 14px rgba(124,92,255,0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+#fabNewNote:active { transform: scale(0.9); }
+
+@media (max-width: 760px) {
+  #fabNewNote { display: flex; align-items: center; justify-content: center; }
+}

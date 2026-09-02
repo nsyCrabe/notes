@@ -54,6 +54,7 @@ const saveStatus = document.getElementById("saveStatus");
 const deleteBtn = document.getElementById("deleteBtn");
 const sidebar = document.getElementById("sidebar");
 const menuToggle = document.getElementById("menuToggle");
+const fabNewNote = document.getElementById("fabNewNote");
 
 function formatDate(ts) {
   const d = new Date(ts);
@@ -155,6 +156,7 @@ function closeSidebarOnMobile() {
 }
 
 newNoteBtn.addEventListener("click", createNote);
+fabNewNote.addEventListener("click", createNote);
 noteTitle.addEventListener("input", scheduleSave);
 noteBody.addEventListener("input", scheduleSave);
 deleteBtn.addEventListener("click", deleteCurrentNote);
